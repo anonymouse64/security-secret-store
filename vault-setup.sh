@@ -23,9 +23,10 @@
 # Variables and parameters
 echo ">> Setup _VAULT_DIR and fix permissions"
 _VAULT_DIR=${_VAULT_DIR:-/vault}
+_VAULT_SCRIPT_DIR=${_VAULT_SCRIPT_DIR:-/vault}
 _PKI_SETUP_VAULT_ENV=${_PKI_SETUP_VAULT_ENV:-pki-setup-config-vault.env}
 
-mkdir /vault/config/assets
+mkdir ${_VAULT_DIR}/config/assets
 
 # Don't chown in snap, as snaps don't support daemons using
 # setuid/gid to drop from root to a specified user/group.
@@ -35,9 +36,9 @@ fi
 
 chmod 644 ${_VAULT_DIR}/config/local.json
 
-./pkisetup --config pkisetup-vault.json
+${_VAULT_SCRIPT_DIR}/pkisetup --config pkisetup-vault.json
 echo ""
-./pkisetup --config pkisetup-kong.json
+${_VAULT_SCRIPT_DIR}/pkisetup --config pkisetup-kong.json
 
 # Don't chown in snap, as snaps don't support daemons using
 # setuid/gid to drop from root to a specified user/group.

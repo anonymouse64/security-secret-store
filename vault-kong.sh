@@ -35,7 +35,8 @@ function houseKeeping() {
 #===================================== MAIN ====================================
 
 # Variables and parameters
-_VAULT_DIR="/vault"
+_VAULT_SCRIPT_DIR=${_VAULT_SCRIPT_DIR:-/vault}
+_VAULT_DIR=${_VAULT_DIR:-/vault}
 _VAULT_CONFIG_DIR="${_VAULT_DIR}/config"
 _VAULT_PKI_DIR="${_VAULT_CONFIG_DIR}/pki"
 _VAULT_ASSETS="${_VAULT_CONFIG_DIR}/assets"
