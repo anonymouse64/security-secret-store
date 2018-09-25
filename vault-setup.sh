@@ -23,10 +23,12 @@
 # Variables and parameters
 echo ">> Setup _VAULT_DIR and fix permissions"
 _VAULT_DIR=${_VAULT_DIR:-/vault}
+_VAULT_CONFIG_DIR=${_VAULT_CONFIG_DIR:-/vault/config}
 _VAULT_SCRIPT_DIR=${_VAULT_SCRIPT_DIR:-/vault}
-_PKI_SETUP_VAULT_ENV=${_PKI_SETUP_VAULT_ENV:-pki-setup-config-vault.env}
+_PKI_SETUP_VAULT_FILE=${_PKI_SETUP_VAULT_FILE:-${_VAULT_DIR}/pkisetup-vault.json}
+_PKI_SETUP_KONG_FILE=${_PKI_SETUP_KONG_FILE:-${_VAULT_DIR}/pkisetup-kong.json}
 
-mkdir ${_VAULT_DIR}/config/assets
+mkdir -p ${_VAULT_CONFIG_DIR}/assets
 
 # Don't chown in snap, as snaps don't support daemons using
 # setuid/gid to drop from root to a specified user/group.
@@ -34,14 +36,13 @@ if [ -z "$SNAP" ]; then
     chown -R vault:vault ${_VAULT_DIR}
 fi
 
-chmod 644 ${_VAULT_DIR}/config/local.json
+chmod 644 ${_VAULT_CONFIG_DIR}/local.json
 
-${_VAULT_SCRIPT_DIR}/pkisetup --config pkisetup-vault.json
-echo ""
-${_VAULT_SCRIPT_DIR}/pkisetup --config pkisetup-kong.json
+${_VAULT_SCRIPT_DIR}/pkisetup --config ${_PKI_SETUP_VAULT_FILE}
+${_VAULT_SCRIPT_DIR}/pkisetup --config ${_PKI_SETUP_KONG_FILE}
 
 # Don't chown in snap, as snaps don't support daemons using
 # setuid/gid to drop from root to a specified user/group.
 if [ -z "$SNAP" ]; then
-    chown -R vault:vault ${_VAULT_DIR}/config/pki
+    chown -R vault:vault ${_VAULT_CONFIG_DIR}/pki
 fi
